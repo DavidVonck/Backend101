@@ -64,7 +64,7 @@ cd Backend
 npm install
 ```
 
-> *NPM staat voor Node Package Manager. Hiermee installeren we de afhankelijkheden voor dit project.*
+> *NPM staat voor Node Package Manager. Hiermee installeren we de dependencies voor dit project.*
 
 Als dit gelukt is, zie je een nieuwe map genaamd `node_modules` in de `Backend`-map.
 
