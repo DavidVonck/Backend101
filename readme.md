@@ -45,7 +45,7 @@ Als je een versie zoals `v20...` ziet, is alles goed gegaan 🥳
 
 ## Voorbereiding
 
-De HTML- en CSS-bestanden zijn al gemaakt, dus hier hoef je in principe niets aan te doen. Als je denkt dat je het beter kunt doe je best zou ik zeggen 😉
+De HTML- en CSS-bestanden zijn al gemaakt, dus hier hoef je in principe niets aan te doen. Als je denkt dat je het beter kunt. Doe je best! 😉
 
 ## Stappenplan
 
