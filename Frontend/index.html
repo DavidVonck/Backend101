@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>index</title>
+</head>
+<body>
+    hallo
+</body>
+</html>
+
+<script>
+    const naam = localStorage.getItem("naam");
+    if (naam) {
+        document.body.innerHTML += `<p>Welcome, ${naam}!</p>`;
+    } else {
+        document.body.innerHTML += `<p>Please <a href="login.html">login</a> or <a href="signup.html">signup</a></p>`;
+    }
+</script>
