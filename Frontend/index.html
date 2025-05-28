@@ -16,8 +16,8 @@
     <main>
         <!-- Input Form -->
         <section class="new-post">
-            <input type="text" id="postTitle" placeholder="Naam van de post" />
-            <textarea id="postContent" placeholder="Text"></textarea>
+            <input type="text" id="Name" placeholder="Naam van de post" />
+            <textarea id="Text" placeholder="Text"></textarea>
             <button onclick="addPost()">Add Post</button>
         </section>
 
@@ -29,44 +29,48 @@
     <script>
         const API = 'http://localhost:3000';
 
-        const getEl = id => document.getElementById(id);
-
         async function getComments() {
             try {
                 const res = await fetch(`${API}/get-comments`);
                 const data = await res.json();
                 displayComments(data.reverse());
-            } catch (err) {
+            } catch (error) {
                 alert("Failed to load comments.");
             }
         }
 
         function displayComments(comments) {
-            const container = getEl('posts');
+            const container = document.getElementById('posts');
             container.innerHTML = comments.map(c => `
                 <div class="post">
-                <div class="meta"><strong>${c.author}</strong> — ${new Date(c.date).toLocaleString()}</div>
-                <p>${c.text}</p>
+                <div class="meta"><strong>${c.name}</strong> — ${new Date(c.timestamp).toLocaleString()}</div>
+                <p>${c.body}</p>
                 <button onclick="deleteComment(${c.id})">Delete</button>
                 </div>
             `).join('');
         }
 
-        async function addComment() {
-            const author = getEl('author').value.trim();
-            const text = getEl('text').value.trim();
 
-            if (!author || !text) return alert("Please fill in both fields.");
+// voeg try catch toe
+        async function addPost() {
+            const name = document.getElementById('Name').value.trim();
+            const text = document.getElementById('Text').value.trim();
 
-            await fetch(`${API}/insert-comments`, {
+            if (!name || !text) return alert("Please fill in both fields.");
+
+            const res = await fetch(`${API}/insert-comment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ author, text })
+                body: JSON.stringify({ name, text })
             });
 
-            getEl('author').value = '';
-            getEl('text').value = '';
-            fetchComments();
+            if (!res.ok) {
+                return alert('Server error when posting comment.');
+            }
+
+            document.getElementById('Name').value = '';
+            document.getElementById('Text').value = '';
+            getComments();
         }
 
         async function deleteComment(id) {
@@ -74,7 +78,7 @@
             fetchComments();
         }
 
-        fetchComments();
+        getComments();
     </script>
 </body>
 

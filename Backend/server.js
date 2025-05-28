@@ -24,14 +24,15 @@ app.get('/get-comments', (req, res) => {
 
 // Voeg een comment toe
 app.post('/insert-comment', (req, res) => {
-  const { name, body } = req.body;
-  if (!name || !body) {
+  const { name, text } = req.body;
+  console.log("🚀 Nieuwe comment:", req.body);
+  if (!name || !text) {
     return res.status(400).json({ error: 'Naam en body zijn verplicht.' });
   }
 
   try {
     const stmt = db.prepare('INSERT INTO comments (name, body) VALUES (?, ?)');
-    const result = stmt.run(name, body);
+    const result = stmt.run(name, text);
     res.json({ id: result.lastInsertRowid, message: '✅ Comment toegevoegd!' });
   } catch (err) {
     console.error("❌ Fout bij toevoegen:", err.message);
