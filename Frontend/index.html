@@ -1,19 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>index</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Blog</title>
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    hallo
+  <header>
+    <h1>My Simple Blog</h1>
+  </header>
+
+  <main>
+    <!-- Input Form -->
+    <section class="new-post">
+      <input type="text" id="postTitle" placeholder="Post title">
+      <textarea id="postContent" placeholder="Write your post here..."></textarea>
+      <button onclick="addPost()">Add Post</button>
+    </section>
+
+    <!-- Blog Posts -->
+    <section id="posts">
+      <article class="post">
+        <h2>First Blog Post</h2>
+        <p class="date">May 28, 2025</p>
+        <p>Welkom op mijn eerste blog.</p>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    function addPost() {
+      const title = document.getElementById("postTitle").value;
+      const content = document.getElementById("postContent").value;
+      if (!title || !content) return;
+
+      const postSection = document.getElementById("posts");
+
+      const article = document.createElement("article");
+      article.className = "post";
+
+      const h2 = document.createElement("h2");
+      h2.textContent = title;
+
+      const date = document.createElement("p");
+      date.className = "date";
+      date.textContent = new Date().toDateString();
+
+      const p = document.createElement("p");
+      p.textContent = content;
+
+      article.appendChild(h2);
+      article.appendChild(date);
+      article.appendChild(p);
+
+      postSection.prepend(article);
+
+      document.getElementById("postTitle").value = "";
+      document.getElementById("postContent").value = "";
+    }
+  </script>
 </body>
 </html>
-
-<script>
-    const naam = localStorage.getItem("naam");
-    if (naam) {
-        document.body.innerHTML += `<p>Welcome, ${naam}!</p>`;
-    } else {
-        document.body.innerHTML += `<p>Please <a href="login.html">login</a> or <a href="signup.html">signup</a></p>`;
-    }
-</script>
