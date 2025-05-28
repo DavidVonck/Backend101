@@ -1,64 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Blog</title>
-  <link rel="stylesheet" href="app.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Blog</title>
+    <link rel="stylesheet" href="app.css">
 </head>
+
 <body>
-  <header>
-    <h1>My Simple Blog</h1>
-  </header>
+    <header>
+        <h1>My Simple Blog</h1>
+    </header>
 
-  <main>
-    <!-- Input Form -->
-    <section class="new-post">
-      <input type="text" id="postTitle" placeholder="Post title">
-      <textarea id="postContent" placeholder="Write your post here..."></textarea>
-      <button onclick="addPost()">Add Post</button>
-    </section>
+    <main>
+        <!-- Input Form -->
+        <section class="new-post">
+            <input type="text" id="postTitle" placeholder="Naam van de post" />
+            <textarea id="postContent" placeholder="Text"></textarea>
+            <button onclick="addPost()">Add Post</button>
+        </section>
 
-    <!-- Blog Posts -->
-    <section id="posts">
-      <article class="post">
-        <h2>First Blog Post</h2>
-        <p class="date">May 28, 2025</p>
-        <p>Welkom op mijn eerste blog.</p>
-      </article>
-    </section>
-  </main>
+        <!-- Blog Posts -->
+        <section id="posts">
+        </section>
+    </main>
 
-  <script>
-    function addPost() {
-      const title = document.getElementById("postTitle").value;
-      const content = document.getElementById("postContent").value;
-      if (!title || !content) return;
+    <script>
+        const API = 'http://localhost:3000';
 
-      const postSection = document.getElementById("posts");
+        const getEl = id => document.getElementById(id);
 
-      const article = document.createElement("article");
-      article.className = "post";
+        async function getComments() {
+            try {
+                const res = await fetch(`${API}/get-comments`);
+                const data = await res.json();
+                displayComments(data.reverse());
+            } catch (err) {
+                alert("Failed to load comments.");
+            }
+        }
 
-      const h2 = document.createElement("h2");
-      h2.textContent = title;
+        function displayComments(comments) {
+            const container = getEl('posts');
+            container.innerHTML = comments.map(c => `
+                <div class="post">
+                <div class="meta"><strong>${c.author}</strong> — ${new Date(c.date).toLocaleString()}</div>
+                <p>${c.text}</p>
+                <button onclick="deleteComment(${c.id})">Delete</button>
+                </div>
+            `).join('');
+        }
 
-      const date = document.createElement("p");
-      date.className = "date";
-      date.textContent = new Date().toDateString();
+        async function addComment() {
+            const author = getEl('author').value.trim();
+            const text = getEl('text').value.trim();
 
-      const p = document.createElement("p");
-      p.textContent = content;
+            if (!author || !text) return alert("Please fill in both fields.");
 
-      article.appendChild(h2);
-      article.appendChild(date);
-      article.appendChild(p);
+            await fetch(`${API}/insert-comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ author, text })
+            });
 
-      postSection.prepend(article);
+            getEl('author').value = '';
+            getEl('text').value = '';
+            fetchComments();
+        }
 
-      document.getElementById("postTitle").value = "";
-      document.getElementById("postContent").value = "";
-    }
-  </script>
+        async function deleteComment(id) {
+            await fetch(`${API}/delete-comments/${id}`, { method: 'DELETE' });
+            fetchComments();
+        }
+
+        fetchComments();
+    </script>
 </body>
+
 </html>
