@@ -99,6 +99,8 @@ http://127.0.0.1:5500/Frontend/index.html
 
 Bekijk de `migrate.js` en `server.js` bestanden in de `Backend` folder. Hierin staat de logica voor de backend. De logica voor de frontend staat in de `Frontend` folder in het `index.html` bestand.
 
+Alle bestanden bevatten commentaar ter verduidelijking.
+
 ### Stap 5: De uitdaging 
 
 Durf jij het aan om de update functionaliteit in te bouwen!? Succes!
