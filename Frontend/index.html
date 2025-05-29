@@ -27,57 +27,111 @@
     </main>
 
     <script>
+        // Het adres van je backend server (die draait lokaal op poort 3000)
         const API = 'http://localhost:3000';
 
+        /*
+         Een korte manier om elementen op te halen via hun id-selector
+         Bijvoorbeeld: $('Name') is hetzelfde als document.getElementById('Name')
+         
+         Meer info over de schrijfwijze van de functie 
+         https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#description
+
+         dit doet hetzelfde
+         function $(s) {
+            return document.getElementById(s)
+         }
+         */
+        $ = (s) => document.getElementById(s);
+
+        // Haalt alle comments op van de server en laat ze zien op de pagina
         async function getComments() {
             try {
+                // Wacht tot de fetch-call klaar is (API-aanroep naar /get-comments)
                 const res = await fetch(`${API}/get-comments`);
+
+                // Wacht tot de JSON-data uit het antwoord is gehaald
                 const data = await res.json();
-                displayComments(data.reverse());
+
+                // Roep een functie aan die de comments toont in de HTML
+                displayComments(data);
             } catch (error) {
+                // Als er iets in het try block faalt (bijvoorbeeld geen verbinding), toon dan een foutmelding
                 alert("Failed to load comments.");
             }
         }
 
+        // Toont de lijst met comments op de pagina
         function displayComments(comments) {
-            const container = document.getElementById('posts');
+            // Zoek het HTML-element waarin de posts in moeten komen
+            const container = $('posts');
+
+            /*
+            Vervang de inhoud van het element met nieuwe HTML voor elk comment, map zorgt ervoor dat er een array-kopie gemaakt wordt
+            https://www.w3schools.com/jsref/jsref_map.asp
+            */
             container.innerHTML = comments.map(c => `
                 <div class="post">
-                <div class="meta"><strong>${c.name}</strong> — ${new Date(c.timestamp).toLocaleString()}</div>
-                <p>${c.body}</p>
-                <button onclick="deleteComment(${c.id})">Delete</button>
+                    <div class="meta">
+                        <strong>${c.name}</strong> — ${new Date(c.timestamp).toLocaleString()}
+                    </div>
+                    <p>${c.body}</p>
+                    <button onclick="deleteComment(${c.id})">Delete</button>
                 </div>
-            `).join('');
+            `).join(''); // Waarna we met join('') alle comments aan elkaar kunnen plakken tot één string
         }
 
-
-// voeg try catch toe
+        // Wordt uitgevoerd wanneer je op de "Post" knop klikt om een nieuwe comment toe te voegen
         async function addPost() {
-            const name = document.getElementById('Name').value.trim();
-            const text = document.getElementById('Text').value.trim();
+            // Haal de naam en het tekstveld op, haal ook de overbodige spaties eruit met trim()
+            const name = $('Name').value.trim();
+            const text = $('Text').value.trim();
 
+            // Controleer of beide velden zijn ingevuld
             if (!name || !text) return alert("Please fill in both fields.");
 
+            // Verstuur de nieuwe comment naar de server via een POST-verzoek
             const res = await fetch(`${API}/insert-comment`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, text })
+                headers: { 'Content-Type': 'application/json' }, // Geef aan dat je JSON verstuurt
+                body: JSON.stringify({ name, text }) // Zet de data om naar een string met JSON erin
             });
 
+            // Als het niet gelukt is, toon een foutmelding
             if (!res.ok) {
                 return alert('Server error when posting comment.');
             }
 
-            document.getElementById('Name').value = '';
-            document.getElementById('Text').value = '';
+            // Maak de invoervelden weer leeg na het posten
+            $('Name').value = '';
+            $('Text').value = '';
+
+            // Haal opnieuw de lijst van comments op, zodat de nieuwe comment zichtbaar wordt
             getComments();
         }
 
+        // Wordt uitgevoerd wanneer op een "Delete" knop geklikt wordt bij een comment
         async function deleteComment(id) {
-            await fetch(`${API}/delete-comments/${id}`, { method: 'DELETE' });
-            fetchComments();
+            // Stuur een DELETE-verzoek naar de server voor het comment met het meegegeven id
+            const res = await fetch(`${API}/delete-comment/${id}`, {
+                method: 'DELETE',
+            });
+
+            // Als het verwijderen niet lukt, toon een fout https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
+            if (!res.ok) {
+                alert('Verwijderen mislukt:', res.status);
+                return;
+            } else {
+                // we wachten nogmaals tot de json data is uitgelezen, daarna loggen we het bericht van de backend
+                const data = await res.json()
+                console.log(data.message)
+            }
+
+            // Haal opnieuw de comments op zodat de verwijderde verdwijnt uit de lijst
+            getComments();
         }
 
+        // Zodra de pagina geladen is, direct de comments ophalen en tonen
         getComments();
     </script>
 </body>
