@@ -1,11 +1,12 @@
 # Inleiding
 
-In dit project ga je een eenvoudig login-systeem bouwen met behulp van de volgende technologieën:
+In dit project ga _jij_ een eenvoudig comment systeem bouwen met behulp van de volgende technologieën:
 
 ### Technologieën
 
 * **Database:** [BetterSqlite 3](https://github.com/WiseLibs/better-sqlite3)
 * **Backend:** [Express.js](https://www.npmjs.com/package/express) (JavaScript, SQL)
+* **Backend:** [nodemon](https://www.npmjs.com/package/nodemon) (Herstart de server als je aanpassingen maakt in het server.js bestand)
 * **Frontend:** HTML en CSS
 
 Daarnaast gebruiken we **Node.js**. Bekijk deze video voor een korte uitleg over wat Node.js is:
@@ -70,23 +71,35 @@ npm install
 
 Als dit gelukt is, zie je in de `Backend`-map een nieuwe map genaamd `node_modules`.
 
-### Stap 2: Live Server
+### Stap 2: Start de server
+In de `Backend`-map zijn nu alle 'dependencies' geinstalleerd. Het enige wat je nu nog hoeft te doen is onderstaand commando in te voeren in de terminal. De server zal nu starten (voor meer info zie het `package.json` bestand).
+```
+npm run start
+```
 
-Download de plugin `Live Server` plugin, klik op de extensions tab en zoek hierop:
+### Stap 3: Live Server
+
+Download de plugin `Live Server`, klik op de extensions tab  (shortcut: CTRL/Command+SHIFT+X) en zoek hierop:
 ```
 ritwickdey.LiveServer
 ```
 Download de extensie
 <hr>
+Klik rechtsonderin VS-Code op de `Go Live` knop. 
+<br><br>
 
-Klik met de rechtermuisknop op het `index.html` bestand in de `Frontend`-map, klik vervolgens in het [contextmenu](https://en.wikipedia.org/wiki/Context_menu) op de optie `Open with Live Server`. 
+Of klik met de rechtermuisknop op het `index.html` bestand in de `Frontend`-map, klik vervolgens in het [contextmenu](https://en.wikipedia.org/wiki/Context_menu) op de optie `Open with Live Server`. 
 
-Je kunt ook rechtsonderin VS-Code op de `Go Live` knop drukken. 
 
 Navigeer naar:
 http://127.0.0.1:5500/Frontend/index.html
 
-### Stap 3: Expirimenteer!
 
-Bekijk de `migrate.js` en `server.js` bestanden in de `Backend` folder. Hierin staat de logica voor de backend.
+### Stap 4: Expirimenteer!
+
+Bekijk de `migrate.js` en `server.js` bestanden in de `Backend` folder. Hierin staat de logica voor de backend. De logica voor de frontend staat in de `Frontend` folder in het `index.html` bestand.
+
+### Stap 5: De uitdaging 
+
+Durf jij het aan om de update functionaliteit in te bouwen!? Succes!
 
